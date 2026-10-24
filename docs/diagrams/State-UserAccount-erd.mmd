@@ -1,0 +1,11 @@
+stateDiagram-v2
+    [*] --> Unverified : Register Account
+
+    Unverified --> Active : Verify OTP [email_verified = true]
+    Unverified --> [*] : OTP timeout / Cancel
+
+    Active --> Blocked : Block account [Violation detected]
+    Blocked --> Active : Unblock account
+
+    Active --> [*] : Delete account
+    Blocked --> [*] : Delete account

@@ -1,0 +1,59 @@
+flowchart TB
+    subgraph SYS["Citizen Feedback & Repeated Issue"]
+        direction LR
+
+        subgraph RES["Resident"]
+            direction TB
+            A["View Proof Images & Notes"]
+            B["Click 'Đánh giá kết quả'<br/>Đánh giá (kèm Comments)"]
+        end
+
+        subgraph BACK["Backend System"]
+            direction TB
+            C(("Start"))
+            D(["Update Status to 'Completed'"])
+            E(["Message: 'Đã hoàn tất<br/>(Phục vụ đánh giá)'"])
+            F{"New Report for same<br/>issue/location?"}
+            G{"Repeated Issue<br/>Count >= 2?"}
+            H(["Route as New Ticket"])
+            I{"Unsatisfied Rate<br/>50%?"}
+            J(["Send Feedback Alert<br/>(With Comments)"])
+            K(("End"))
+        end
+
+        subgraph MAN["Manager"]
+            direction TB
+            L(["View Feedback Notification"])
+            M(["Flag Repeated Issue & Trigger Warning"])
+        end
+
+        C --> D
+        D --> E
+        E --> A
+        A --> B
+
+        E --> F
+        F -->|no| K
+        F -->|yes| G
+
+        G -->|no| H
+        G -->|yes| M
+        H --> K
+        M --> K
+
+        B --> I
+        I -->|yes| J
+        I -->|no| K
+        J --> L
+        L --> K
+    end
+
+    style D fill:#fff8cc,stroke:#ff9900,color:#222
+    style E fill:#fff8cc,stroke:#ff9900,color:#222
+    style H fill:#fff8cc,stroke:#ff9900,color:#222
+    style J fill:#fff8cc,stroke:#ff9900,color:#222
+    style L fill:#fff8cc,stroke:#ff9900,color:#222
+    style M fill:#fff8cc,stroke:#ff9900,color:#222
+    style F fill:#fff0b3,stroke:#ff9900,color:#222
+    style G fill:#fff0b3,stroke:#ff9900,color:#222
+    style I fill:#fff0b3,stroke:#ff9900,color:#222

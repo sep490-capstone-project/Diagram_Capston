@@ -1,0 +1,391 @@
+erDiagram
+    Role {
+        UUID roleId PK
+        String roleName
+    }
+
+    User {
+        UUID userId PK
+        UUID roleId FK
+        String fullName
+        String email
+        Boolean emailVerified
+        String phoneNumber
+        String passwordHash
+        String province
+        String ward
+        String address
+        Enum status
+        DateTime createdAt
+        DateTime updatedAt
+    }
+
+    UserDepartment {
+        UUID id PK
+        UUID userId FK
+        UUID departmentId FK
+        DateTime createdAt
+    }
+
+    Department {
+        UUID departmentId PK
+        UUID managerId FK
+        String name
+        Enum level
+        String contactEmail
+        String phoneNumber
+    }
+
+    Ticket {
+        UUID ticketId PK
+        UUID userId FK
+        Text description
+        Enum severity
+        Enum priority
+        Enum locationMethod
+        Geometry location
+        String address
+        Enum status
+        DateTime createdAt
+        DateTime updatedAt
+        DateTime deadline
+        Boolean isLifeThreatening
+        Boolean needsManualReview
+        Boolean isAnonymous
+        Text reviewNote
+    }
+
+    TicketVote {
+        UUID voteId PK
+        UUID ticketId FK
+        UUID userId FK
+        DateTime createdAt
+    }
+
+    TicketHistory {
+        UUID historyId PK
+        UUID ticketId FK
+        UUID actorId FK
+        Enum actionType
+        Enum previousStatus
+        Enum currentStatus
+        Text actionNote
+        DateTime createdAt
+    }
+
+    TicketStep {
+        UUID id PK
+        UUID ticketId FK
+        UUID stepId FK
+        UUID assigneeId FK
+        Enum assignmentStatus
+        Integer orderIndex
+        DateTime startedAt
+        DateTime completedAt
+        DateTime deadline
+        DateTime createdAt
+        DateTime updatedAt
+        Text notes
+        DateTime isDeleted
+    }
+
+    ResolutionEvidence {
+        UUID evidenceId PK
+        UUID ticketStepId FK
+        UUID staffId FK
+        String imageUrl
+        Text resolutionNote
+        DateTime createdAt
+    }
+
+    Step {
+        UUID stepId PK
+        UUID subCategoryId FK
+        String stepName
+        String description
+        Integer duration
+    }
+
+    Category {
+        UUID categoryId PK
+        String name
+        String description
+        Boolean isActive
+    }
+
+    SubCategory {
+        UUID subCategoryId PK
+        UUID categoryId FK
+        String name
+        Text description
+        Integer sla
+        Enum priority
+        Boolean isActive
+    }
+
+    TicketSubCategory {
+        UUID id PK
+        UUID subCategoryId FK
+        UUID ticketId FK
+        DateTime createdAt
+    }
+
+    ReportImage {
+        UUID mediaId PK
+        UUID ticketId FK
+        UUID imageUrl
+        DateTime createdAt
+    }
+
+    Rating {
+        UUID id PK
+        UUID userId FK
+        UUID ticketId FK
+        Integer rate
+        Boolean isAnonymous
+        Text feedback
+        DateTime createdAt
+        DateTime updatedAt
+        DateTime deletedAt
+        Boolean isDeleted
+    }
+
+    Notification {
+        UUID notificationId PK
+        UUID ticketId FK
+        String title
+        Text content
+        DateTime createdAt
+    }
+
+    UserNotification {
+        UUID id PK
+        UUID notificationId FK
+        UUID userId FK
+        Boolean isRead
+        DateTime readAt
+        DateTime createdAt
+    }
+
+    RoutingRule {
+        UUID ruleId PK
+        UUID departmentId FK
+        UUID categoryId FK
+        String province
+        String ward
+    }
+
+    erDiagram
+    Role {
+        UUID roleId PK
+        String roleName
+    }
+
+    User {
+        UUID userId PK
+        UUID roleId FK
+        String fullName
+        String email
+        Boolean emailVerified
+        String phoneNumber
+        String passwordHash
+        String province
+        String ward
+        String address
+        Enum status
+        DateTime createdAt
+        DateTime updatedAt
+    }
+
+    UserDepartment {
+        UUID id PK
+        UUID userId FK
+        UUID departmentId FK
+        DateTime createdAt
+    }
+
+    Department {
+        UUID departmentId PK
+        UUID managerId FK
+        String name
+        Enum level
+        String contactEmail
+        String phoneNumber
+    }
+
+    Ticket {
+        UUID ticketId PK
+        UUID userId FK
+        Text description
+        Enum severity
+        Enum priority
+        Enum locationMethod
+        Geometry location
+        String address
+        Enum status
+        DateTime createdAt
+        DateTime updatedAt
+        DateTime deadline
+        Boolean isLifeThreatening
+        Boolean needsManualReview
+        Boolean isAnonymous
+        Text reviewNote
+    }
+
+    TicketVote {
+        UUID voteId PK
+        UUID ticketId FK
+        UUID userId FK
+        DateTime createdAt
+    }
+
+    TicketHistory {
+        UUID historyId PK
+        UUID ticketId FK
+        UUID actorId FK
+        Enum actionType
+        Enum previousStatus
+        Enum currentStatus
+        Text actionNote
+        DateTime createdAt
+    }
+
+    TicketStep {
+        UUID id PK
+        UUID ticketId FK
+        UUID stepId FK
+        UUID assigneeId FK
+        Enum assignmentStatus
+        Integer orderIndex
+        DateTime startedAt
+        DateTime completedAt
+        DateTime deadline
+        DateTime createdAt
+        DateTime updatedAt
+        Text notes
+        DateTime isDeleted
+    }
+
+    ResolutionEvidence {
+        UUID evidenceId PK
+        UUID ticketStepId FK
+        UUID staffId FK
+        String imageUrl
+        Text resolutionNote
+        DateTime createdAt
+    }
+
+    Step {
+        UUID stepId PK
+        UUID subCategoryId FK
+        String stepName
+        String description
+        Integer duration
+    }
+
+    Category {
+        UUID categoryId PK
+        String name
+        String description
+        Boolean isActive
+    }
+
+    SubCategory {
+        UUID subCategoryId PK
+        UUID categoryId FK
+        String name
+        Text description
+        Integer sla
+        Enum priority
+        Boolean isActive
+    }
+
+    TicketSubCategory {
+        UUID id PK
+        UUID subCategoryId FK
+        UUID ticketId FK
+        DateTime createdAt
+    }
+
+    ReportImage {
+        UUID mediaId PK
+        UUID ticketId FK
+        UUID imageUrl
+        DateTime createdAt
+    }
+
+    Rating {
+        UUID id PK
+        UUID userId FK
+        UUID ticketId FK
+        Integer rate
+        Boolean isAnonymous
+        Text feedback
+        DateTime createdAt
+        DateTime updatedAt
+        DateTime deletedAt
+        Boolean isDeleted
+    }
+
+    Notification {
+        UUID notificationId PK
+        UUID ticketId FK
+        String title
+        Text content
+        DateTime createdAt
+    }
+
+    UserNotification {
+        UUID id PK
+        UUID notificationId FK
+        UUID userId FK
+        Boolean isRead
+        DateTime readAt
+        DateTime createdAt
+    }
+
+    RoutingRule {
+        UUID ruleId PK
+        UUID departmentId FK
+        UUID categoryId FK
+        String province
+        String ward
+    }
+
+    Role ||--o{ User : "has"
+
+    User ||--o{ UserDepartment : "has department mapping"
+    Department ||--o{ UserDepartment : "includes users"
+
+    Department ||--o{ RoutingRule : "owns"
+    Category ||--o{ RoutingRule : "routes by category"
+
+    Category ||--o{ SubCategory : "contains"
+    SubCategory ||--o{ Step : "defines"
+
+    Ticket ||--o{ TicketStep : "has steps"
+    Step ||--o{ TicketStep : "instantiated as"
+    TicketStep ||--o{ ResolutionEvidence : "has evidence"
+
+    User ||--o{ ResolutionEvidence : "staff submits"
+
+    User ||--o{ Ticket : "creates"
+    User ||--o{ TicketVote : "votes"
+    Ticket ||--o{ TicketVote : "receives votes"
+
+    Ticket ||--o{ TicketHistory : "has history"
+    User ||--o{ TicketHistory : "acts on"
+
+    Ticket ||--o{ ReportImage : "has images"
+
+    Ticket ||--o{ Rating : "receives ratings"
+    User ||--o{ Rating : "submits"
+
+    Ticket ||--o{ Notification : "generates"
+    Notification ||--o{ UserNotification : "delivered to"
+    User ||--o{ UserNotification : "receives"
+
+    Ticket ||--o{ TicketSubCategory : "has category mapping"
+    SubCategory ||--o{ TicketSubCategory : "used by tickets"
+
+    User ||--o{ Department : "manages"

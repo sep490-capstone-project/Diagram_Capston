@@ -1,0 +1,49 @@
+flowchart TB
+    subgraph AI["AI Engine"]
+        A(("Start"))
+        B(["Check Location, Authority & Regulations, Assess Severity"])
+        C{"Life-threatening Incident OR AI Uncertainty?"}
+        D(["AI Auto Submit"])
+        A --> B --> C
+        C -->|no| D
+    end
+
+    subgraph Manager["Manager"]
+        E(["Manual Review"])
+        F(["Manual Routing & Assign"])
+        E --> F
+    end
+
+    subgraph Backend["Backend System (Routing)"]
+        G(["Auto Routing & Assign"])
+        H(["Re-route / Transfer to Right Dept"])
+        H --> G
+    end
+
+    subgraph Staff["Staff"]
+        I{"Merge"}
+        J(["Receive Ticket & Validate Functionality"])
+        K{"Within Department Authority?"}
+        L(["Accept & Assign"])
+        M(["Click Từ chối & Bổ sung cơ quan đúng"])
+        N(("End"))
+        I --> J --> K
+        K -->|yes| L --> N
+        K -->|no| M
+    end
+
+    C -->|yes| E
+    D --> G
+    F --> I
+    G --> I
+    M --> H
+
+    style B fill:#fff8cc,stroke:#ff9900,color:#222
+    style D fill:#fff8cc,stroke:#ff9900,color:#222
+    style E fill:#fff8cc,stroke:#ff9900,color:#222
+    style F fill:#fff8cc,stroke:#ff9900,color:#222
+    style G fill:#fff8cc,stroke:#ff9900,color:#222
+    style H fill:#fff8cc,stroke:#ff9900,color:#222
+    style J fill:#fff8cc,stroke:#ff9900,color:#222
+    style L fill:#fff8cc,stroke:#ff9900,color:#222
+    style M fill:#fff8cc,stroke:#ff9900,color:#222

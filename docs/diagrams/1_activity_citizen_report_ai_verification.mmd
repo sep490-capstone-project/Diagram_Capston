@@ -1,0 +1,66 @@
+flowchart TB
+    subgraph Resident
+        direction TB
+        A(( )) --> B([Click "Tạo báo cáo mới"])
+        B --> C{Manual Entry<br/>Method?}
+
+        C -->|Manual Entry| D([Click "Chọn vị trí"<br/>Nhập địa chỉ])
+        C -->|Current Location| E([Auto-detect GPS<br/>Coordinates])
+
+        D --> F{ }
+        E --> F
+
+        F --> G([Click "Chụp ảnh / Tải<br/>lên ảnh"])
+        G --> H{Information<br/>Accurate?}
+
+        H -->|yes| I{ }
+        H -->|no| J([Click "Chỉnh sửa /<br/>Thêm mô tả bổ sung"])
+        J --> I
+
+        I --> K([Click "Gửi báo cáo"])
+
+        K --> L([Click "Xem danh sách<br/>các trường hợp"])
+        L --> M([Select Duplicate<br/>Issue as Upvote])
+        M --> N(( ))
+    end
+
+    subgraph AI_Engine["AI Engine"]
+        direction TB
+        O([Analyze Image, Video &<br/>Text: Category, Severity,<br/>Danger Level])
+        O --> P([Generate Draft<br/>Report & Display])
+    end
+
+    subgraph Backend_System["Backend System"]
+        direction TB
+        Q([Cross-field<br/>Validation])
+        Q --> R{Open Duplicate<br/>Issue Found?}
+
+        R -->|yes| S([Increment Vote for<br/>Existing Ticket])
+        R -->|no| T([Auto-escalation])
+
+        S --> U([Save New Ticket to<br/>DB (Status: Initiated)])
+        T --> U
+    end
+
+    G --> O
+    O --> P
+    P --> H
+    K --> Q
+    R -->|yes| M
+    U --> N
+
+    style B fill:#fff8cc,stroke:#ff9900
+    style D fill:#fff8cc,stroke:#ff9900
+    style E fill:#fff8cc,stroke:#ff9900
+    style G fill:#fff8cc,stroke:#ff9900
+    style I fill:#fff8cc,stroke:#ff9900
+    style J fill:#fff8cc,stroke:#ff9900
+    style K fill:#fff8cc,stroke:#ff9900
+    style L fill:#fff8cc,stroke:#ff9900
+    style M fill:#fff8cc,stroke:#ff9900
+    style O fill:#fff8cc,stroke:#ff9900
+    style P fill:#fff8cc,stroke:#ff9900
+    style Q fill:#fff8cc,stroke:#ff9900
+    style S fill:#fff8cc,stroke:#ff9900
+    style T fill:#fff8cc,stroke:#ff9900
+    style U fill:#fff8cc,stroke:#ff9900

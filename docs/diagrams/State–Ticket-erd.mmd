@@ -1,0 +1,24 @@
+stateDiagram-v2
+    [*] --> Initiated : Resident submits report
+
+    Initiated --> Cancelled : Resident cancels ticket
+    Initiated --> Open : AI reviewed [needs manual review = false]
+    Initiated --> Pending_Review : AI reviewed [needs manual review = true]
+
+    Pending_Review --> Open : Manual approved
+    Pending_Review --> Rejected : Manual rejected
+    Open --> Rejected : Authority rejected
+
+    Open --> Assigned : Route & Assigned
+    Assigned --> Assigned : Reassigned
+    Assigned --> In_Progress : Work started
+    In_Progress --> Open : Rerouted
+    Open --> Cancelled : Resident cancels ticket
+
+    In_Progress --> Resolved : Evidence submitted
+    Resolved --> In_Progress : Evidence rejected
+    Resolved --> Completed : Closed
+
+    Completed --> [*] : Archive ticket
+    Cancelled --> [*]
+    Rejected --> [*]

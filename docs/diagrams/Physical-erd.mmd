@@ -1,0 +1,217 @@
+erDiagram
+    role {
+        UUID role_id PK
+        VARCHAR_50 role_name
+    }
+
+    user_account {
+        UUID user_id PK
+        VARCHAR_100 full_name
+        VARCHAR_150 email
+        BOOLEAN email_verified
+        VARCHAR_20 phone_number
+        VARCHAR_255 password_hash
+        VARCHAR_100 province
+        VARCHAR_100 ward
+        VARCHAR_100 address
+        VARCHAR_20 status
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+        UUID role_id FK
+        UUID department_id FK
+    }
+
+    user_department {
+        UUID id PK
+        TIMESTAMP created_at
+        UUID user_id FK
+        UUID department_id FK
+    }
+
+    department {
+        UUID department_id PK
+        VARCHAR_255 name
+        VARCHAR_50 level
+        VARCHAR_150 contact_email
+        VARCHAR_20 phone_number
+        BOOLEAN is_deleted
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+        UUID manager_id FK
+    }
+
+    ticket {
+        UUID ticket_id PK
+        TEXT description
+        VARCHAR_20 severity
+        VARCHAR_20 priority
+        VARCHAR_20 location_method
+        GEOMETRY location
+        VARCHAR_255 address
+        VARCHAR_20 status
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+        BOOLEAN is_life_threatening
+        BOOLEAN needs_manual_review
+        BOOLEAN is_anonymous
+        TIMESTAMP deadline
+        TEXT review_note
+        UUID user_id FK
+    }
+
+    ticket_vote {
+        UUID vote_id PK
+        TIMESTAMP created_at
+        UUID ticket_id FK
+        UUID user_id FK
+    }
+
+    ticket_history {
+        UUID history_id PK
+        VARCHAR_50 action_type
+        VARCHAR_20 previous_status
+        VARCHAR_20 current_status
+        TEXT action_note
+        TIMESTAMP created_at
+        UUID ticket_id FK
+        UUID actor_id FK
+    }
+
+    ticket_step {
+        UUID id PK
+        VARCHAR_20 assignment_status
+        INT order_index
+        TIMESTAMP started_at
+        TIMESTAMP completed_at
+        TIMESTAMP deadline
+        TEXT notes
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+        BOOLEAN is_deleted
+        UUID ticket_id FK
+        UUID step_id FK
+        UUID assignee_id FK
+    }
+
+    resolution_evidence {
+        UUID evidence_id PK
+        VARCHAR_500 image_url
+        TEXT resolution_note
+        TIMESTAMP created_at
+        UUID staff_id FK
+        UUID ticket_step_id FK
+    }
+
+    step {
+        UUID step_id PK
+        VARCHAR_255 step_name
+        TEXT description
+        INT duration
+        UUID sub_category_id FK
+    }
+
+    category {
+        UUID category_id PK
+        VARCHAR_100 name
+        VARCHAR_255 description
+        BOOLEAN is_active
+    }
+
+    sub_category {
+        UUID sub_category_id PK
+        VARCHAR_255 name
+        TEXT description
+        INT sla
+        VARCHAR_50 priority
+        BOOLEAN is_active
+        UUID category_id FK
+    }
+
+    ticket_subcategory {
+        UUID id PK
+        TIMESTAMP created_at
+        UUID ticket_id FK
+        UUID sub_category_id FK
+    }
+
+    report_image {
+        UUID media_id PK
+        TIMESTAMP created_at
+        VARCHAR_500 image_url
+        UUID ticket_id FK
+    }
+
+    rating {
+        UUID id PK
+        INT rate
+        BOOLEAN is_anonymous
+        TEXT feedback
+        TIMESTAMP is_deleted
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+        UUID user_id FK
+        UUID ticket_id FK
+    }
+
+    notification {
+        UUID notification_id PK
+        VARCHAR_255 title
+        TEXT content
+        TIMESTAMP created_at
+        UUID ticket_id FK
+    }
+
+    user_notification {
+        UUID id PK
+        BOOLEAN is_read
+        TIMESTAMP read_at
+        TIMESTAMP created_at
+        UUID notification_id FK
+        UUID user_id FK
+    }
+
+    routing_rule {
+        UUID rule_id PK
+        VARCHAR_255 province
+        VARCHAR_255 ward
+        UUID department_id FK
+        UUID category_id FK
+    }
+
+    role ||--o{ user_account : "role_id"
+    department o|--o{ user_account : "department_id"
+
+    user_account ||--o{ user_department : "user_id"
+    department ||--o{ user_department : "department_id"
+
+    user_account ||--o{ ticket : "user_id"
+    user_account ||--o{ ticket_vote : "user_id"
+    ticket ||--o{ ticket_vote : "ticket_id"
+
+    ticket ||--o{ ticket_history : "ticket_id"
+    user_account ||--o{ ticket_history : "actor_id"
+
+    ticket ||--o{ ticket_step : "ticket_id"
+    step ||--o{ ticket_step : "step_id"
+    user_account ||--o{ ticket_step : "assignee_id"
+
+    ticket_step ||--o{ resolution_evidence : "ticket_step_id"
+    user_account ||--o{ resolution_evidence : "staff_id"
+
+    category ||--o{ sub_category : "category_id"
+    sub_category ||--o{ step : "sub_category_id"
+
+    ticket ||--o{ report_image : "ticket_id"
+    ticket ||--o{ ticket_subcategory : "ticket_id"
+    sub_category ||--o{ ticket_subcategory : "sub_category_id"
+
+    user_account ||--o{ rating : "user_id"
+    ticket ||--o{ rating : "ticket_id"
+
+    ticket ||--o{ notification : "ticket_id"
+    notification ||--o{ user_notification : "notification_id"
+    user_account ||--o{ user_notification : "user_id"
+
+    department ||--o{ routing_rule : "department_id"
+    category ||--o{ routing_rule : "category_id"
+    user_account o|--o{ department : "manager_id"

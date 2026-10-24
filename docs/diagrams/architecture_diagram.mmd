@@ -1,0 +1,103 @@
+flowchart TB
+    %% USER & ACTOR TIER
+    subgraph ACTORS["USER & ACTOR TIER"]
+        direction LR
+        Resident["Resident"]
+        Administrator["Administrator"]
+        Manager["Manager"]
+        Staff["Staff"]
+    end
+
+    %% PRESENTATION CLIENT TIER
+    subgraph CLIENT["PRESENTATION CLIENT TIER"]
+        direction LR
+
+        subgraph MOBILE["Resident Mobile Application"]
+            MobileMap["React-native map & GPS"]
+            MobileScreens["Mobile Screens (UI)"]
+            MobileState["AsyncStorage (Auth State)"]
+            MobileMap --> MobileScreens
+            MobileScreens -->|"Get JWT Token"| MobileState
+        end
+
+        subgraph WEB["Authority Web Portal (SPA)"]
+            AdminWorkspace["Admin Workspace Component"]
+            ManagerWorkspace["Department Manager Workspace Component"]
+            StaffWorkspace["Staff Field Workspace Component"]
+            SharedCore["Shared Core, State & API Client"]
+            AdminWorkspace --> SharedCore
+            ManagerWorkspace --> SharedCore
+            StaffWorkspace --> SharedCore
+        end
+    end
+
+    Resident -->|"UI Interaction (Take Photo, GPS, Submit Incident)"| MobileMap
+    Administrator -->|"Configuration & System Administration"| AdminWorkspace
+    Manager -->|"Coordination & Assignment of work"| ManagerWorkspace
+    Staff -->|"Update progress & Acceptance"| StaffWorkspace
+
+    %% SPRING BOOT REST & REAL-TIME SERVER
+    subgraph SERVER["Spring Boot 3 REST & Real-time Server"]
+        direction LR
+
+        subgraph SECURITY["Security Filter Chain & STOMP Interceptor"]
+            Cors["CORS & Security Filter Chain"]
+            Jwt["JwtAuthenticationFilter"]
+            Cors --> Jwt
+        end
+
+        subgraph CONTROLLER["Controller & Messaging"]
+            RestControllers["Spring MVC REST Controllers"]
+            WebSocketBroker["WebSocket Message Broker"]
+        end
+
+        subgraph BUSINESS["Business Logic & Engine"]
+            TicketWorkflow["TicketWorkflowEngine"]
+            RoutingRuleService["RoutingRuleService"]
+            LocationService["LocationService"]
+            TokenService["TokenService & OtpService"]
+            NotificationService["NotificationService"]
+            AIService["AIService"]
+        end
+
+        subgraph DATAACCESS["Data Access"]
+            JpaRepositories["Spring Data JPA Repositories"]
+            SpatialRepositories["Hibernate Spatial Repositories"]
+        end
+
+        Jwt -->|"Validated Security Context"| RestControllers
+        RestControllers -->|"Service Call (DTO)"| TicketWorkflow
+        TicketWorkflow -->|"Entity Operations (CRUD)"| JpaRepositories
+        TicketWorkflow --> SpatialRepositories
+        RestControllers --> WebSocketBroker
+        WebSocketBroker -.->|"Publish Notifications (topic ...)"| NotificationService
+    end
+
+    MobileScreens -->|"HTTPS / REST API (JSON)"| Cors
+    SharedCore -->|"HTTPS / REST API (JSON)"| Cors
+    MobileScreens -.->|"WSS / STOMP (Real-time Notification)"| WebSocketBroker
+    SharedCore -.->|"WSS / STOMP (Ticket & Task Alerts)"| WebSocketBroker
+
+    %% PERSISTENCE & CACHE TIER
+    subgraph STORAGE["PERSISTENCE & CACHE TIER"]
+        PostgreSQL[("PostgreSQL 15 + PostGIS 3.4")]
+        Redis[("Redis 7 (In-Memory)")]
+    end
+
+    JpaRepositories -->|"JDBC 5432 (Relational SQL Data)"| PostgreSQL
+    SpatialRepositories -->|"Spatial SQL (ST_DWithin, ST_Contains)"| PostgreSQL
+    TokenService -->|"RESP 6379 (Token Blacklist & OTP TTL)"| Redis
+
+    %% EXTERNAL 3RD-PARTY SERVICES
+    subgraph EXTERNAL["EXTERNAL 3RD-PARTY SERVICES"]
+        Gemini["Google Gemini Multimodal AI API"]
+        Resend["Resend Email API"]
+        Cloudinary["Cloudinary Media CDN"]
+        OpenStreetMap["OpenStreetMap / Map Tiles"]
+    end
+
+    AIService -->|"HTTPS / REST (Request Analysis / Response JSON)"| Gemini
+    TokenService -->|"HTTPS / REST (Resend Java SDK)"| Resend
+    MobileMap -->|"HTTPS Multi-part (Upload Incident Photos)"| Cloudinary
+    StaffWorkspace -->|"HTTPS Multi-part (Upload Resolution Proof)"| Cloudinary
+    MobileMap -->|"HTTPS (Fetch Map Tiles)"| OpenStreetMap

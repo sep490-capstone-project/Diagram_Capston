@@ -1,0 +1,16 @@
+stateDiagram-v2
+    [*] --> Open : Step instantiated
+
+    Open --> Assigned : Assign to staff
+    Open --> Cancelled : Cancel step
+
+    Assigned --> In_Progress : Staff starts step
+    Assigned --> Cancelled : Cancel step
+
+    In_Progress --> Resolved : Task finish
+    In_Progress --> Cancelled : Cancel step
+
+    Resolved --> Completed : Step verified
+
+    Completed --> [*] : Finish step
+    Cancelled --> [*] : Terminate

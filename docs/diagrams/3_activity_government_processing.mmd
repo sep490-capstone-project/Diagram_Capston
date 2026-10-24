@@ -1,0 +1,41 @@
+flowchart TB
+    subgraph GOV["Government Processing"]
+        direction LR
+
+        subgraph WEB["Web Management"]
+            direction TB
+            A((Start))
+            B(["Update Status to In Progress"])
+            C{"Phát hiện vượt thẩm quyền?"}
+            D(["Click 'Chuyển giao cơ quan khác'"])
+            E(["Upload Evidence Images & Results"])
+            F(["Update Status to Resolved"])
+
+            A --> B
+            B --> C
+            C -->|Yes| D
+            C -->|No| E
+            E --> F
+        end
+
+        subgraph BACKEND["Backend System"]
+            direction TB
+            G(["Message: 'Đang xử lý'"])
+            H(["Forward Ticket to Right Dept"])
+            I((End))
+        end
+
+        B --> G
+        G --> C
+        D --> H
+        H --> I
+        F --> I
+    end
+
+    style B fill:#fff8cc,stroke:#ff9900,color:#222
+    style D fill:#fff8cc,stroke:#ff9900,color:#222
+    style E fill:#fff8cc,stroke:#ff9900,color:#222
+    style F fill:#fff8cc,stroke:#ff9900,color:#222
+    style G fill:#fff8cc,stroke:#ff9900,color:#222
+    style H fill:#fff8cc,stroke:#ff9900,color:#222
+    style C fill:#fff0b3,stroke:#ff9900,color:#222

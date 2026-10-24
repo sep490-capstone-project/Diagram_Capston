@@ -1,0 +1,45 @@
+flowchart TB
+    subgraph AI["AI Engine"]
+        A((Start)) --> B["Scan New Ticket Data"]
+        B --> C{"Priority = High?"}
+    end
+
+    subgraph Manager["Manager"]
+        D["Confirm SOS Emergency"]
+        E["Tag SOS & Dispatch to Staff"]
+        D --> E
+    end
+
+    subgraph Resident["Resident"]
+        F["Click Xem chi tiết sự cố khẩn cấp"]
+        G["Choose SOS Tag & Message"]
+        F --> G
+    end
+
+    subgraph Backend["Backend System"]
+        H["GIS Spatial Scan & Nearest Addresses"]
+        I["Send Local Warning (Nearby Residents)"]
+        H --> I
+    end
+
+    subgraph Staff["Staff"]
+        J["Receive Issue & Confirm Safety"]
+    end
+
+    C -->|Yes| D
+    C -->|No| Z((End))
+    E --> H
+    E --> J
+    I --> G
+    J --> G
+    G --> Z
+
+    style B fill:#fff8cc,stroke:#ff9900,color:#222
+    style D fill:#fff8cc,stroke:#ff9900,color:#222
+    style E fill:#fff8cc,stroke:#ff9900,color:#222
+    style F fill:#fff8cc,stroke:#ff9900,color:#222
+    style G fill:#fff8cc,stroke:#ff9900,color:#222
+    style H fill:#fff8cc,stroke:#ff9900,color:#222
+    style I fill:#fff8cc,stroke:#ff9900,color:#222
+    style J fill:#fff8cc,stroke:#ff9900,color:#222
+    style C fill:#fff0b3,stroke:#ff9900,color:#222
